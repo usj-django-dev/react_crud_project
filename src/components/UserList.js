@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useContext } from 'react';
+import { GlobalContext } from '../context/GlobalState';
 import { Link } from 'react-router-dom';
 import {
     ListGroup,
@@ -9,23 +10,30 @@ import {
 
 
 export const UserList = () => {
+    const { users, removeUser } = useContext(GlobalContext);
+
     return (
         <ListGroup className="mt-4">
+            {users.length > 0 ? (
+                <>
+                    {users.map(user => (
+                        <ListGroupItem className="d-flex" key={user.id}>
+                            <strong> {user.name} </strong>
+                            <div className="ml-auto">
+                                <Link className="btn btn-warning mr-1" to={`/edit/${user.id}`}> Edit </Link>
+                                <Button onClick={() => removeUser(user.id)} color="danger">Delete</Button>
+                            </div>
+                        </ListGroupItem>
 
-            <ListGroupItem className="d-flex">
-                <strong> User One </strong>
-                <div className="ml-auto">
-                    <Link className="btn btn-warning mr-1" to="/edit/1"> Edit </Link>
-                    <Button color="danger">Delete</Button>
-                </div>
-            </ListGroupItem>
-            <ListGroupItem className="d-flex">
-                <strong> User One </strong>
-                <div className="ml-auto">
-                    <Link className="btn btn-warning mr-1" to="/edit/1"> Edit </Link>
-                    <Button color="danger">Delete</Button>
-                </div>
-            </ListGroupItem>
-        </ListGroup>
+                    ))}
+                </>
+            ) : (
+                    <h4 className="text-center"> No Users </h4>
+                )
+            }
+
+
+
+        </ListGroup >
     )
 }
